@@ -5,7 +5,7 @@ This script is the safest way to uninstall `.pkg` on macOS.
 ```shell
 ./uninstaller <Your Package ID Here>
 ```
-`Package ID` is the identifier of the package to be uninstalled, which can be lookup using `pkgutil --pkgs`.
+`Package ID` is the identifier of the package to be uninstalled, which can be looked up using `pkgutil --pkgs`.
 
 ## Bugs & Reports
 You can report a bug or share your ideas by email `31core@tutanota.com`.

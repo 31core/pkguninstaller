@@ -1,9 +1,16 @@
 #!/bin/zsh
 
-mkdir root
-pkgbuild --root root --identifier $1 uninstall.pkg
-sudo installer -pkg uninstall.pkg -target /
-sudo pkgutil --forget $1
-rm uninstall.pkg
-rmdir root
+uninstall() {
+    TMP_DIR=$(mktemp -d)
 
+    pkgbuild --root $TMP_DIR --identifier $1 uninstall.pkg
+    sudo installer -pkg uninstall.pkg -target /
+    sudo pkgutil --forget $1
+    rm uninstall.pkg
+    rmdir $TMP_DIR
+}
+
+for PKG in $@
+do
+    uninstall $i
+done
