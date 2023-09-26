@@ -5,12 +5,17 @@ uninstall() {
 
     pkgbuild --root $TMP_DIR --identifier $1 uninstall.pkg
     sudo installer -pkg uninstall.pkg -target /
-    sudo pkgutil --forget $1
+    if [ $? = 0 ]
+    then
+        sudo pkgutil --forget $1
+    else
+        echo $1 uninstallation failed.
+    fi
     rm uninstall.pkg
     rmdir $TMP_DIR
 }
 
 for PKG in $@
 do
-    uninstall $i
+    uninstall $PKG
 done
