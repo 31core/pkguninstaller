@@ -4,14 +4,14 @@ uninstall() {
     TMP_DIR=$(mktemp -d)
     TMP_FILE=$(mktemp)
     rm $TMP_FILE
-    TMP_PKG=$TMP_PKG.pkg
+    TMP_PKG=$TMP_FILE.pkg
 
     pkgbuild --root $TMP_DIR --identifier $1 $TMP_PKG > /dev/null
     rmdir $TMP_DIR
-    sudo installer -pkg $TMP_PKG -target /
+    sudo installer -pkg $TMP_PKG -target / 2>&1 > /dev/null
     if [ $? = 0 ]
     then
-        sudo pkgutil --forget $1
+        sudo pkgutil --forget $1 2>&1 > /dev/null
         echo $1 uninstallation success.
     else
         echo $1 uninstallation failed.
@@ -24,6 +24,10 @@ then
     if [ $1 = '-h' -o $1 = '--help' ]
     then
         echo 'Usage: pkg_remove <PKG_ID>'
+        exit
+    elif [ $1 = '-v' -o $1 = '--version' ]
+    then
+        echo 'pkg_remove version 0.2'
         exit
     fi
 else
