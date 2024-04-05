@@ -1,0 +1,38 @@
+#!/bin/zsh
+
+uninstall() {
+    TMP_DIR=$(mktemp -d)
+    TMP_FILE=$(mktemp)
+    rm $TMP_FILE
+    TMP_PKG=$TMP_PKG.pkg
+
+    pkgbuild --root $TMP_DIR --identifier $1 $TMP_PKG > /dev/null
+    rmdir $TMP_DIR
+    sudo installer -pkg $TMP_PKG -target /
+    if [ $? = 0 ]
+    then
+        sudo pkgutil --forget $1
+        echo $1 uninstallation success.
+    else
+        echo $1 uninstallation failed.
+    fi
+    rm $TMP_PKG
+}
+
+if [ ! -z $1 ]
+then
+    if [ $1 = '-h' -o $1 = '--help' ]
+    then
+        echo 'Usage: pkg_remove <PKG_ID>'
+        exit
+    fi
+else
+    echo 'Usage: pkg_remove <PKG_ID>'
+    exit
+fi
+
+for PKG in $@
+do
+    printf 'uninstalling \e[32m%s\e[0m\n' $PKG
+    uninstall $PKG
+done
