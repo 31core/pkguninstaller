@@ -1,6 +1,8 @@
 #!/bin/zsh
 
-uninstall() {
+VERSION=0.3.0
+
+function uninstall {
     TMP_DIR=$(mktemp -d)
     TMP_FILE=$(mktemp)
     rm $TMP_FILE
@@ -12,9 +14,9 @@ uninstall() {
     if [ $? = 0 ]
     then
         sudo pkgutil --forget $1 2>&1 > /dev/null
-        echo $1 uninstallation success.
+        echo '\e[32msuccess\e[0m'
     else
-        echo $1 uninstallation failed.
+        echo '\e[31mfailed\e[0m'
     fi
     rm $TMP_PKG
 }
@@ -23,11 +25,11 @@ if [ ! -z $1 ]
 then
     if [ $1 = '-h' -o $1 = '--help' ]
     then
-        echo 'Usage: pkg_remove <PKG_ID>'
+        echo 'Usage: pkg_remove <PKG_ID> ...'
         exit
     elif [ $1 = '-v' -o $1 = '--version' ]
     then
-        echo 'pkg_remove version 0.2'
+        printf 'pkg_remove version %s\n' $VERSION
         exit
     fi
 else
